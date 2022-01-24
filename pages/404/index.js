@@ -6,7 +6,7 @@ export default function NotFound() {
             <div>
                 <h1>404</h1>
                 <h4>Sorry, page do not exist!!</h4>
-                <Link href="/">Go back home</Link>
+                <Link href="/account/login">Login</Link>
             </div>
 
     )
