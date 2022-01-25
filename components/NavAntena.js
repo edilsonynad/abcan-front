@@ -15,7 +15,7 @@ export default function NavAntena() {
       </a>
       <ul id="ddmenu_1" className="collapse show dropdown-nav">
         <li>
-          <Link href="/candidatura">
+          <Link href="/roles/candidatura">
             <a href="index.html" className="">
               {" "}
               Ver candidatura{" "}
@@ -23,7 +23,7 @@ export default function NavAntena() {
           </Link>
         </li>
         <li>
-          <Link href="/candidatura/add">
+          <Link href="/roles/candidatura/add">
             <a href="index.html" className="">
               {" "}
               Realizar candidatura{" "}

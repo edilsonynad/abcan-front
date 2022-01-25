@@ -1,15 +1,12 @@
 import Layout from "@/components/Layout";
-import { useContext,useState, useEffect } from "react";
-import {useRouter} from  'next/router'
+import { useContext, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import AuthContext from "@/context/AuthContext";
 import { parseCookies } from "@/helpers/index";
-import Redirect from "@/components/Redirect";
 export default function index() {
-
   return (
     <div>
       <Layout title="Bem-vindo Candidato">
-        <Redirect />
         <div className="row">
           <div className="col-xl-3 col-lg-4 col-sm-6">
             <div className="icon-card mb-30">
@@ -17,7 +14,6 @@ export default function index() {
                 <i className="lni lni-cart-full"></i>
               </div>
               <div className="content">
-            
                 <h6 className="mb-10">New Orders</h6>
                 <h3 className="text-bold mb-10"></h3>
                 <p className="text-sm text-success">
@@ -143,22 +139,11 @@ export default function index() {
 }
 
 export async function getServerSideProps({ req }) {
+  const { token } = parseCookies(req);
 
-
-    const { token } = parseCookies(req);
-  
-    if (!token) {
-      return {
-        redirect: {
-          destination: "/account/login",
-          permanent: false,
-        },
-      };
-    }
-  
-    return {
-      props: {
-        token,
-      },
-    };
-  }
+  return {
+    props: {
+      token,
+    },
+  };
+}

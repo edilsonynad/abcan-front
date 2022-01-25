@@ -3,13 +3,12 @@ import { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "@/context/AuthContext";
 import { parseCookies } from "@/helpers/index";
-import Redirect from "@/components/Redirect";
 import { API_URL } from "@/config/index";
 export default function index({ candidaturas, universidades, cursos }) {
   return (
     <div>
       <Layout title="Bem-vindo Admin">
-        <Redirect />
+   
         <div className="row">
           <div className="col-xl-3 col-lg-4 col-sm-6">
             <div className="icon-card mb-30">
@@ -124,14 +123,6 @@ export default function index({ candidaturas, universidades, cursos }) {
 export async function getServerSideProps({ req }) {
   const { token } = parseCookies(req);
 
-  if (!token) {
-    return {
-      redirect: {
-        destination: "/account/login",
-        permanent: false,
-      },
-    };
-  }
 
   const data = await fetch(`${API_URL}/candidaturas`);
 

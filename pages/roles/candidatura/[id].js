@@ -116,14 +116,6 @@ export async function getServerSideProps({ req, params: { id } }) {
 
   const { token } = parseCookies(req);
 
-  if (!token) {
-    return {
-        redirect: {
-            destination: '/account/login', 
-            permanent: false
-        }
-    }
-}
 
   const candidatura = await data.json();
 

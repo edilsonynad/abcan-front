@@ -57,14 +57,6 @@ export async function getServerSideProps({ req, params: { id } }) {
 
   const { token } = parseCookies(req);
 
-  if (!token) {
-    return {
-      redirect: {
-        destination: "/account/login",
-        permanent: false,
-      },
-    };
-  }
 
   const universidade = await data.json();
 

@@ -15,11 +15,11 @@ export default function redirect() {
   }, [user]);
 
   if (papel === "Antena") {
-    router.push("/antena");
+    router.push("/roles/antena");
   } else if (papel === "Admin") {
-    router.push("/admin");
+    router.push("/roles/admin");
   } else if (papel === "Normal") {
-    router.push("/normal");
+    router.push("/roles/candidato");
   }
 
   return <>Redirecting Users</>;

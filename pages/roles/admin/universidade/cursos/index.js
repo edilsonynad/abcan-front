@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function index({ cursos }) {
     const router = useRouter();
-    const deleteEvent = async (id) => {
+    const handleDelete = async (id) => {
       if (confirm("Tem certeza que pretende eliminar essa candidatura???")) {
         const res = await fetch(`http://localhost:1337/cursos/${id}`, {
           method: "DELETE",
@@ -27,6 +27,11 @@ export default function index({ cursos }) {
     };
   return (
     <Layout title="Cursos">
+      <Link href={`cursos/add`}>
+          <a href="#0" class="main-btn primary-btn btn-hover btn-sm">
+            <i class="lni lni-plus mr-5"></i> Criar
+          </a>
+        </Link>
       <div className="row">
         <div className="col-lg-12">
           <div className="card-style mb-30">

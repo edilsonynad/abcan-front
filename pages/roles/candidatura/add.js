@@ -463,15 +463,6 @@ export default function add({ token }) {
 export async function getServerSideProps({ req }) {
   const { token } = parseCookies(req);
 
-  if (!token) {
-    return {
-      redirect: {
-        destination: "/account/login",
-        permanent: false,
-      },
-    };
-  }
-
   return {
     props: {
       token,
