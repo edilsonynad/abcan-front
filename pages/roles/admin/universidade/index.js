@@ -7,12 +7,7 @@ import Link from "next/link";
 export default function index({ universidades }) {
   return (
     <div>
-      <Layout title="Universidades">
-        <Link href={`universidade/add`}>
-          <a href="#0" class="main-btn primary-btn btn-hover btn-sm">
-            <i class="lni lni-plus mr-5"></i> Criar
-          </a>
-        </Link>
+      <Layout title="Universidades" button="Criar univerisdade" url="universidade/add">
         <UniLists universidades={universidades} />
       </Layout>
     </div>

@@ -13,8 +13,7 @@ export default function FileUpload({ children, handleAnexoId }) {
   const [anexo, setAnexo] = useState();
 
   const handleUploadFiles = async (e) => {
-
-    e.preventDefault()
+    e.preventDefault();
     /**Upload Passaporte */
     const formDataPass = new FormData();
     formDataPass.append("files", PassaporteFile);
@@ -49,19 +48,18 @@ export default function FileUpload({ children, handleAnexoId }) {
     setCertId(CertificadoId[0].id);
   };
 
-
   useEffect(() => {
     if (passId !== null && nifId !== null && CertId !== null) {
       setAnexo({
         Passaporte: {
-          "id": passId,
+          id: passId,
         },
         Nif: {
-            "id": nifId
+          id: nifId,
         },
         certificado: {
-            "id": CertId
-        }
+          id: CertId,
+        },
       });
       setEstado(true);
     }
@@ -72,13 +70,13 @@ export default function FileUpload({ children, handleAnexoId }) {
       const resAnexo = await fetch(`http://localhost:1337/anexos`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-          },
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(anexo),
       });
 
       const anexoJ = await resAnexo.json();
-      handleAnexoId(anexoJ.id)
+      handleAnexoId(anexoJ.id);
     }
   }, [estado, anexo]);
 
@@ -123,7 +121,12 @@ export default function FileUpload({ children, handleAnexoId }) {
               }}
             />
           </div>
-          <button onClick={handleUploadFiles}>Subir ficheiros</button>
+          <button
+            class="main-btn primary-btn-outline btn-hover"
+            onClick={handleUploadFiles}
+          >
+            Subir ficheiros
+          </button>
         </div>
         {children}
       </div>

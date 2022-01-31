@@ -18,7 +18,7 @@ export default function redirect() {
     router.push("/roles/antena");
   } else if (papel === "Admin") {
     router.push("/roles/admin");
-  } else if (papel === "Normal") {
+  } else if (papel === "Candidato") {
     router.push("/roles/candidato");
   }
 

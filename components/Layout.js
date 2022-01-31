@@ -1,11 +1,11 @@
 import Sidebar from "./Sidebar";
 import HeaderDashboard from "./HeaderDashboard";
 import { Head } from "next/document";
-
-export default function Layout({title, children, papel }) {
+import Link from "next/link";
+export default function Layout({ title, children, button, url }) {
   return (
     <>
-      <Sidebar papel={papel}/>
+      <Sidebar />
       <main className="main-wrapper">
         <HeaderDashboard />
         <section className="section">
@@ -13,8 +13,19 @@ export default function Layout({title, children, papel }) {
             <div className="title-wrapper pt-30">
               <div className="row align-items-center">
                 <div className="col-md-6">
-                  <div className="title mb-30">
-                    <h2>{title}</h2>
+                  <div className="title d-flex align-items-center flex-wrap mb-30">
+                    <h2 class="mr-40">{title}</h2>
+
+                    {button && (
+                      <Link href={url}>
+                        <a
+                          href="#0"
+                          class="main-btn primary-btn btn-hover btn-sm"
+                        >
+                          <i class="lni lni-plus mr-5"></i> {button}
+                        </a>
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -28,5 +39,5 @@ export default function Layout({title, children, papel }) {
 }
 
 Layout.defaultProps = {
-  title: 'Dashboard',
-}
+  title: "Dashboard",
+};

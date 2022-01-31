@@ -28,7 +28,7 @@ export default function ListItem({ candidatura, handleDelete }) {
             </Link>
         </button> */}
           <button className="text-success">
-            <Link href={`/candidatura/${candidatura.id}`}>
+            <Link href={`/roles/candidatura/${candidatura.id}`}>
               <i className=" lni lni-eye"></i>
             </Link>
           </button>

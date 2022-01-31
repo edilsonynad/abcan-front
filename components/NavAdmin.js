@@ -16,7 +16,7 @@ export default function NavAdmin() {
       </a>
       <ul id="ddmenu_1" className="collapse  dropdown-nav">
         <li>
-          <Link href="roles/admin/candidatura">
+          <Link href="/roles/admin/candidatura">
             <a href="index.html" className="">
               {" "}
               Ver candidatura{" "}
@@ -24,7 +24,7 @@ export default function NavAdmin() {
           </Link>
         </li>
         <li>
-          <Link href="roles/admin/candidatura/add">
+          <Link href="/roles/admin/candidatura/add">
             <a href="index.html" className="">
               {" "}
               Realizar candidatura{" "}
@@ -46,7 +46,7 @@ export default function NavAdmin() {
       </a>
       <ul id="ddmenu_2" className="collapse dropdown-nav">
         <li>
-          <Link href="roles/admin/universidade">
+          <Link href="/roles/admin/universidade">
             <a href="index.html" className="">
               {" "}
               Univerisades{" "}
@@ -54,7 +54,7 @@ export default function NavAdmin() {
           </Link>
         </li>
         <li>
-          <Link href="roles/admin/universidade/cursos">
+          <Link href="/roles/admin/universidade/cursos">
             <a href="index.html" className="">
               {" "}
               Cursos{" "}

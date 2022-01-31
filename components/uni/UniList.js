@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 export default function UniList({ universidade, handleDelete }) {
-  console.log(universidade);
 
   return (
     <tr>
@@ -22,7 +21,7 @@ export default function UniList({ universidade, handleDelete }) {
             </Link>
             </button>*/}
           <button className="text-success">
-            <Link href={`/admin/universidade/${universidade.id}`}>
+            <Link href={`/roles/admin/universidade/${universidade.id}`}>
               <i className=" lni lni-eye"></i>
             </Link>
           </button>

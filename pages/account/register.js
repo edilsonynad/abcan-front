@@ -10,7 +10,7 @@ export default function register() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [Papel, setPapel] = useState("Normal");
+
 
 
   const { register, error } = useContext(AuthContext);
@@ -21,7 +21,7 @@ export default function register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    register({username, email, password, Papel});
+    register({username, email, password});
   };
 
   return (
