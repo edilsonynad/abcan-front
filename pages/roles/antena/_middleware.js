@@ -11,15 +11,13 @@ export async function middleware(req) {
   });
   const user = await strapiRes.json();
 
-  let count = req.page.name.length;
   const page = req.page.name;
   const papel = user.papel.toLowerCase();
   let res = page.search(papel);
 
-
-    if( res == -1){
-        return NextResponse.redirect(`/roles/${papel}`)
-    }else{
-        return NextResponse.next()
-    }
+  if (res == -1) {
+    return NextResponse.redirect(`/roles/${papel}`);
+  } else {
+    return NextResponse.next();
+  }
 }

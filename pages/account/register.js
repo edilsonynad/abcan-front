@@ -84,12 +84,12 @@ export default function register() {
                       </div>
                     </div>
 
-                    <div className="col-12">
+                    {/*<div className="col-12">
                       <div className="input-style-1">
                         <label>Confirmar Password</label>
                         <input type="password" placeholder="Password" />
                       </div>
-                    </div>
+                    </div>*/}
 
                     <div className="col-12">
                       <div

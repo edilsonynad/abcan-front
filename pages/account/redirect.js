@@ -22,7 +22,10 @@ export default function redirect() {
     router.push("/roles/candidato");
   }
 
-  return <>Redirecting Users</>;
+  return (
+    <>
+    </>
+  );
 }
 
 export async function getServerSideProps({ req }) {
