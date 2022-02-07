@@ -1,2 +1,2 @@
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://abvagas.herokuapp.com'
-export const NEXT_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'                                                    
+export const NEXT_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://advagas.vercel.app'                                                    
