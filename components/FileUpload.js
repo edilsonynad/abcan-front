@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import {API_URL} from '@/config/index'
 export default function FileUpload({ children, handleAnexoId }) {
   const [PassaporteFile, setPassaporteFile] = useState(null);
   const [NifFile, setNifFile] = useState(null);
@@ -18,7 +18,7 @@ export default function FileUpload({ children, handleAnexoId }) {
     const formDataPass = new FormData();
     formDataPass.append("files", PassaporteFile);
 
-    const resPassaporte = await fetch(`http://localhost:1337/upload`, {
+    const resPassaporte = await fetch(`${API_URL}/upload`, {
       method: "POST",
       body: formDataPass,
     });
@@ -29,7 +29,7 @@ export default function FileUpload({ children, handleAnexoId }) {
     const formDataNif = new FormData();
     formDataNif.append("files", NifFile);
 
-    const resNif = await fetch(`http://localhost:1337/upload`, {
+    const resNif = await fetch(`${API_URL}/upload`, {
       method: "POST",
       body: formDataNif,
     });
@@ -40,7 +40,7 @@ export default function FileUpload({ children, handleAnexoId }) {
     const formDataCertificado = new FormData();
     formDataCertificado.append("files", CertificadoFile);
 
-    const resCertificado = await fetch(`http://localhost:1337/upload`, {
+    const resCertificado = await fetch(`${API_URL}/upload`, {
       method: "POST",
       body: formDataCertificado,
     });
@@ -67,7 +67,7 @@ export default function FileUpload({ children, handleAnexoId }) {
 
   useEffect(async () => {
     if (estado) {
-      const resAnexo = await fetch(`http://localhost:1337/anexos`, {
+      const resAnexo = await fetch(`${API_URL}/anexos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

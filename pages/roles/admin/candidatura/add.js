@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { parseCookies } from "@/helpers/index";
+import {API_URL} from '@/config/index'
 
 export default function add({ token }) {
   /**
@@ -67,7 +68,7 @@ export default function add({ token }) {
   const [anexoId, setAnexoId] = useState(null);
 
   useEffect(async () => {
-    const dataUniversidade = await fetch(`http://localhost:1337/universidades`);
+    const dataUniversidade = await fetch(`${API_URL}/universidades`);
     const universidade = await dataUniversidade.json();
     setUniversidade(universidade);
   }, []);
@@ -75,7 +76,7 @@ export default function add({ token }) {
   useEffect(async () => {
     if (uniId) {
       const dataCursos = await fetch(
-        `http://localhost:1337/universidades/${uniId}`
+        `${API_URL}/universidades/${uniId}`
       );
       const universidadesCursos = await dataCursos.json();
       setCursos(universidadesCursos.cursos);
@@ -84,7 +85,7 @@ export default function add({ token }) {
 
   const submitCandidatoInfo = async () => {
     //Submit Endereco
-    const resEndereco = await fetch(`http://localhost:1337/enderecos`, {
+    const resEndereco = await fetch(`${API_URL}/enderecos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -99,7 +100,7 @@ export default function add({ token }) {
     const ende = await resEndereco.json();
     setEnderecoId(ende.id);
     //Submit Contato
-    const resContato = await fetch(`http://localhost:1337/contatoes`, {
+    const resContato = await fetch(`${API_URL}/contatoes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -130,7 +131,7 @@ export default function add({ token }) {
     if (hasEmpityFields) {
       return;
     }
-    const res = await fetch(`http://localhost:1337/candidatoes`, {
+    const res = await fetch(`${API_URL}/candidatoes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -170,7 +171,7 @@ export default function add({ token }) {
     if (hasEmpityFields) {
       return;
     } else {
-      const res = await fetch(`http://localhost:1337/candidaturas`, {
+      const res = await fetch(`${API_URL}/candidaturas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

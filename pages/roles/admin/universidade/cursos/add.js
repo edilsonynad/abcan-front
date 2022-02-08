@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
+import {API_URL} from '@/config/index'
 export default function add() {
   const router = useRouter();
   const [curso, setCurso] = useState({
@@ -15,7 +16,7 @@ export default function add() {
   const [uni, setUni] = useState([]);
 
   useEffect(async () => {
-    const res = await fetch(`http://localhost:1337/universidades`);
+    const res = await fetch(`${API_URL}/universidades`);
     const uniSet = await res.json();
     setUni(uniSet);
   }, [uni]);
@@ -23,7 +24,7 @@ export default function add() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(`http://localhost:1337/cursos`, {
+    const res = await fetch(`${API_URL}/cursos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
