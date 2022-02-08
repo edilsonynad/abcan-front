@@ -8,7 +8,8 @@ export default function index({ universidades }) {
   return (
     <div>
       <Layout title="Universidades" button="Criar univerisdade" url="universidade/add">
-        <UniLists universidades={universidades} />
+       
+        {universidades ?  <UniLists universidades={universidades} /> : ""}
       </Layout>
     </div>
   );
