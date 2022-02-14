@@ -4,10 +4,14 @@ export default function FileUpload({ children, handleAnexoId }) {
   const [PassaporteFile, setPassaporteFile] = useState(null);
   const [NifFile, setNifFile] = useState(null);
   const [CertificadoFile, setCertificadoFile] = useState(null);
+  const [FotoFile, setFotoFile] = useState(null);
+  const [DeclaracaoFile, setDeclaracaoFile] = useState(null);
 
   const [passId, setPassId] = useState(null);
   const [nifId, setNifId] = useState(null);
   const [CertId, setCertId] = useState(null);
+  const [FotoId, setFotoId] = useState(null);
+  const [DeclaId, setDeclaId] = useState(null);
 
   const [estado, setEstado] = useState(false);
   const [anexo, setAnexo] = useState();
@@ -46,10 +50,32 @@ export default function FileUpload({ children, handleAnexoId }) {
     });
     const CertificadoId = await resCertificado.json();
     setCertId(CertificadoId[0].id);
+
+    /**Upload Foto */
+    const formDataFoto = new FormData();
+    formDataFoto.append("files", FotoFile);
+   
+    const resFoto = await fetch(`${API_URL}/upload`, {
+       method: "POST",
+       body: formDataFoto,
+     });
+    const FtId = await resFoto.json();
+    setFotoId(FtId[0].id);
+
+    /**Upload Foto */
+    const formDataDeclaracao = new FormData();
+    formDataDeclaracao.append("files", DeclaracaoFile);
+   
+    const resDeclaracao = await fetch(`${API_URL}/upload`, {
+       method: "POST",
+       body: formDataDeclaracao,
+     });
+    const DeclaracaoId = await resDeclaracao.json();
+    setDeclaId(DeclaracaoId[0].id);
   };
 
   useEffect(() => {
-    if (passId !== null && nifId !== null && CertId !== null) {
+    if (passId !== null && nifId !== null && CertId !== null && FotoId !== null && DeclaId !== null) {
       setAnexo({
         Passaporte: {
           id: passId,
@@ -60,10 +86,16 @@ export default function FileUpload({ children, handleAnexoId }) {
         certificado: {
           id: CertId,
         },
+        foto: {
+          id: FotoId,
+        },
+        declaracao: {
+          id: DeclaId,
+        }
       });
       setEstado(true);
     }
-  }, [passId, nifId, CertId]);
+  }, [passId, nifId, CertId, FotoId, DeclaId]);
 
   useEffect(async () => {
     if (estado) {
@@ -118,6 +150,30 @@ export default function FileUpload({ children, handleAnexoId }) {
               id="certificado"
               onChange={(e) => {
                 setCertificadoFile(e.target.files[0]);
+              }}
+            />
+          </div>
+
+          <div className="input-style-1">
+            <label>Foto</label>
+            <input
+              type="file"
+              name="foto"
+              id="foto"
+              onChange={(e) => {
+                setFotoFile(e.target.files[0]);
+              }}
+            />
+          </div>
+
+          <div className="input-style-1">
+            <label>Declaração de honra</label>
+            <input
+              type="file"
+              name="declaracao"
+              id="declaracao"
+              onChange={(e) => {
+                setDeclaracaoFile(e.target.files[0]);
               }}
             />
           </div>

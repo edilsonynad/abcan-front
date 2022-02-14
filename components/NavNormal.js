@@ -11,22 +11,30 @@ export default function NavNormal() {
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="text">Candiaturas Candidato</span>
+        <span className="text">Candiaturas</span>
       </a>
       <ul id="ddmenu_1" className="collapse show dropdown-nav">
         <li>
           <Link href="/roles/candidatura">
             <a href="index.html" className="">
               {" "}
-              Ver candidatura{" "}
+              Suas candidaturas{" "}
             </a>
           </Link>
-        </li>
+        </li> 
         <li>
           <Link href="/roles/candidatura/add">
             <a href="index.html" className="">
               {" "}
               Realizar candidatura{" "}
+            </a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/roles/reguralamentos">
+            <a href="index.html" className="">
+              {" "}
+              Regulamentos{" "}
             </a>
           </Link>
         </li>

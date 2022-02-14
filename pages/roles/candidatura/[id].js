@@ -88,7 +88,7 @@ export default function CandidaturaPage({ candidatura }) {
             {candidatura.cursos.map((curso) => {
               return (
                 <p key={curso.id}>
-                  {curso.id} {curso.Nome_curso}
+                  {curso.index} {curso.Nome_curso}
                 </p>
               );
             })}
@@ -112,9 +112,15 @@ export default function CandidaturaPage({ candidatura }) {
 }
 
 export async function getServerSideProps({ req, params: { id } }) {
-  const data = await fetch(`http://localhost:1337/candidaturas/${id}`);
-
   const { token } = parseCookies(req);
+  const data = await fetch(`http://localhost:1337/candidaturas/${id}`,{
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` 
+    }
+  });
+
+
 
 
   const candidatura = await data.json();

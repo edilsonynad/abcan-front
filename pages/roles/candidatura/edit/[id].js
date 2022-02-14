@@ -1,12 +1,30 @@
+import FileUpload from "@/components/FileUpload";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { parseCookies } from "@/helpers/index";
+import { API_URL } from "@/config/index";
 
-export default function edit({ candidaturaData }) {
+export default function edit({ candidaturaData, token }) {
+  const router = useRouter();
+  /**
+   * Inserindo dados da API em estados
+   */
+
+  const [candidato, setCandidato] = useState({
+    id: candidaturaData.candidato.id,
+    Nome: candidaturaData.candidato.Nome,
+    Passaporte: candidaturaData.candidato.Passaporte,
+    NIF: candidaturaData.candidato.NIF,
+    Data_nascimento: candidaturaData.candidato.Data_nascimento,
+    contato: candidaturaData.candidato.contato,
+    endereco: candidaturaData.candidato.endereco,
+  });
 
   const [endereco, setEndereco] = useState({
+    id: "",
     Ilha: "",
     Cidade: "",
     Concelho: "",
@@ -14,203 +32,181 @@ export default function edit({ candidaturaData }) {
   });
 
   const [contato, setContato] = useState({
+    id: "",
     Telefone: "",
     Email: "",
   });
-  useEffect(
-    async () => {
-      const resContato = await fetch(
-        `http://localhost:1337/contatoes/${candidaturaData.candidato.contato}`
-      );
-      const contato = await resContato.json();
 
-      const resEndereco = await fetch(
-        `http://localhost:1337/enderecos/${candidaturaData.candidato.endereco}`
-      );
-      const endereco = await resEndereco.json();
-
-      setContato(contato);
-      setEndereco(endereco);
-    },
-    { candidaturaData, endereco,contato }
-  );
-
-  /**
-   * Universidades e Cursos
-   */
-  const router = useRouter();
-  const [universidade, setUniversidade] = useState([
-    
-  ]);
+  const [universidade, setUniversidade] = useState([]);
   const [uniId, setUniId] = useState(candidaturaData.universidade.id);
 
   const [cursos, setCursos] = useState([]);
-  const [cursoId, setCursoId] = useState(candidaturaData.curso[0].id);
+  const [cursoId, setCursoId] = useState({
+    escolha1: candidaturaData.cursos[0].id,
+    escolha2: candidaturaData.cursos[1].id,
+    escolha3: candidaturaData.cursos[2].id,
+  });
 
-  const [enderecoId, setEnderecoId] = useState();
-  const [contatoId, setContatoId] = useState();
-  const [candidatoId, setCandidatoId] = useState();
-
-  /**Candidatura
-   */
+  const [enderecoId, setEnderecoId] = useState(endereco.id);
+  const [contatoId, setContatoId] = useState(contato.id);
+  const [candidatoId, setCandidatoId] = useState(candidato.id);
+  const [anexoId, setAnexoId] = useState(null);
+  const [updateCandidatura, setUpdateCandidatura] = useState(false);
+  const [finalizar, setFinalizar] = useState(false);
 
   const [candidatura, setCandidatura] = useState({
-    candidato: {},
-    universidade: {},
-    anexo: {},
-    Estado: "",
-    cursos: [],
+    universidade: { id: uniId },
+    Estado: "Recebido",
+    cursos: [
+      { id: cursoId.escolha1 },
+      { id: cursoId.escolha2 },
+      { id: cursoId.escolha3 },
+    ],
   });
 
-  /**
-   * Dados pessoais
-   */
-  const [candidato, setCandidato] = useState({
-    Nome: candidaturaData.candidato.Nome,
-    Passaporte: candidaturaData.candidato.Passaporte,
-    NIF: candidaturaData.candidato.NIF,
-    Data_nascimento: candidaturaData.candidato.Data_nascimento,
-    contato: "",
-    endereco: "",
-  });
+  useEffect(
+    async () => {
+      const resContato = await fetch(
+        `http://localhost:1337/contatoes/${candidato.contato}`
+      );
+      const contatoAPI = await resContato.json();
 
+      const resEndereco = await fetch(
+        `http://localhost:1337/enderecos/${candidato.endereco}`
+      );
 
+      const enderecoAPI = await resEndereco.json();
 
-  /**
-   * Anexos
-   */
+      setContato({
+        id: contatoAPI.id,
+        Telefone: contatoAPI.Telefone,
+        Email: contatoAPI.Email,
+      });
 
-  const [anexo, setAnexo] = useState({
-    Passaporte: {},
-    Nif: {},
-    certificado: {},
-  });
+      setEndereco({
+        id: enderecoAPI.id,
+        Ilha: enderecoAPI.Ilha,
+        Cidade: enderecoAPI.Cidade,
+        Concelho: enderecoAPI.Concelho,
+        Zona: enderecoAPI.Zona,
+      });
+    },
+    { endereco, contato }
+  );
 
   useEffect(async () => {
-    const dataUniversidade = await fetch(`http://localhost:1337/universidades`);
+    const dataUniversidade = await fetch(`${API_URL}/universidades`);
     const universidade = await dataUniversidade.json();
     setUniversidade(universidade);
   }, []);
 
   useEffect(async () => {
     if (uniId) {
-      const dataCursos = await fetch(
-        `http://localhost:1337/universidades/${uniId}`
-      );
+      const dataCursos = await fetch(`${API_URL}/universidades/${uniId}`);
       const universidadesCursos = await dataCursos.json();
       setCursos(universidadesCursos.cursos);
     }
   }, [uniId]);
 
-  const submitCandidatoInfo = async () => {
-    //Submit Endereco
-    const resEndereco = await fetch(`http://localhost:1337/enderecos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(endereco),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    //Update Endereco
+    const resEndereco = await fetch(
+      `http://localhost:1337/enderecos/${endereco.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(endereco),
+      }
+    );
 
     if (!resEndereco.ok) {
       toast.error("Problemas com o cadastro do endereco");
       return;
     }
-    const ende = await resEndereco.json();
-    setEnderecoId(ende.id);
-    //Submit Contato
-    const resContato = await fetch(`http://localhost:1337/contatoes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(contato),
-    });
+
+    /**Update Caontato */
+    const resContato = await fetch(
+      `http://localhost:1337/contatoes/${contato.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(contato),
+      }
+    );
 
     if (!resContato.ok) {
       toast.error("Problemas com o cadastro do contato");
       return;
     }
-    const cont = await resContato.json();
 
-    setContatoId(cont.id);
-  };
-
-  useEffect(async () => {
-    if (contatoId != undefined && enderecoId != undefined) {
-      setCandidato({ ...candidato, endereco: enderecoId, contato: contatoId });
-    }
-  }, [contatoId, enderecoId]);
-
-  useEffect(async () => {
-    const hasEmpityFields = Object.values(candidato).some(
-      (element) => element === ""
+    /**Update candidatos */
+     const res = await fetch(
+      `http://localhost:1337/candidatoes/${candidato.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(candidato),
+      }
     );
-
-    if (hasEmpityFields) {
-      return;
-    }
-    const res = await fetch(`http://localhost:1337/candidatoes`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(candidato),
-    });
 
     if (!res.ok) {
       toast.error("Problemas com o cadastro do candidato");
       s;
       return;
     }
-    const cand = await res.json();
-    setCandidatoId(cand.id);
-  }, [candidato, candidaturaData]);
 
-  /**Setting Candidatura State */
+    setUpdateCandidatura(true);
+  };
+
   useEffect(async () => {
-    if (candidatoId != undefined) {
+    if (updateCandidatura) {
       setCandidatura({
-        candidato: { id: candidatoId },
         universidade: { id: uniId },
-        //anexo: {id: anexoId},
         Estado: "Recebido",
-        cursos: [{ id: cursoId }],
+        cursos: [
+          { id: cursoId.escolha1 },
+          { id: cursoId.escolha2 },
+          { id: cursoId.escolha3 },
+        ],
       });
+      setUpdateCandidatura(false);
+      setFinalizar(true);
     }
-  }, [candidatoId, uniId, cursoId]);
+  }, [updateCandidatura, candidatura, finalizar]);
 
   useEffect(async () => {
-    const hasEmpityFields = Object.values(candidatura).some(
-      (element) => element === ""
-    );
-    if (hasEmpityFields) {
-      return;
-    } else {
-      const res = await fetch(`http://localhost:1337/candidaturas`, {
-        method: "POST",
+    if (finalizar) {
+      const res = await fetch(`${API_URL}/candidaturas/${candidaturaData.id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(candidatura),
       });
 
       if (!res.ok) {
+        if (res.status === 403 || res.status === 401) {
+          toast.error("Nao tens permissao para editar esta candidatura");
+          return;
+        }
         toast.error("Problemas com o cadastro da candidatura");
         return;
       }
-      const data = await res.json();
-      router.push(`/candidatura/${data.id}`);
+      setFinalizar(false)
     }
-  }, [candidatura]);
+  }, [candidatura, finalizar]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    submitCandidatoInfo();
-  };
   /**Colecting data */
   const handlePersonalData = (e) => {
-    console.log(e.target)
     const { name, value } = e.target;
     setCandidato({ ...candidato, [name]: value });
   };
@@ -230,7 +226,11 @@ export default function edit({ candidaturaData }) {
     setAnexo({ ...anexo, [name]: value });
   };
 
- return (
+  const handleAnexoId = (id) => {
+    setAnexoId(id);
+  };
+
+  return (
     <div>
       <Layout title="Realize a sua candidatura">
         <ToastContainer />
@@ -245,8 +245,8 @@ export default function edit({ candidaturaData }) {
                   <input
                     type="text"
                     name="Nome"
-                    id="Nome"
                     value={candidato.Nome}
+                    id="Nome"
                     placeholder="Nome completo"
                     onChange={handlePersonalData}
                   />
@@ -307,9 +307,8 @@ export default function edit({ candidaturaData }) {
                     type="text"
                     name="Telefone"
                     id="telefone"
-                    value={contato.Telefone}
                     placeholder="Numero telefone"
-  
+                    value={contato.Telefone}
                     onChange={handleContatoData}
                   />
                 </div>
@@ -322,8 +321,8 @@ export default function edit({ candidaturaData }) {
                     type="text"
                     name="Ilha"
                     id="Ilha"
-                    value={endereco.Ilha}
                     placeholder="Ilha"
+                    value={endereco.Ilha}
                     onChange={handleEnderecoData}
                   />
                 </div>
@@ -334,8 +333,8 @@ export default function edit({ candidaturaData }) {
                     type="text"
                     name="Cidade"
                     id="Cidade"
-                    value={endereco.Cidade}
                     placeholder="Cidade"
+                    value={endereco.Cidade}
                     onChange={handleEnderecoData}
                   />
                 </div>
@@ -346,8 +345,8 @@ export default function edit({ candidaturaData }) {
                     type="text"
                     name="Concelho"
                     id="Concelho"
-                    value={endereco.Concelho}
                     placeholder="Concelho"
+                    value={endereco.Conselho}
                     onChange={handleEnderecoData}
                   />
                 </div>
@@ -370,7 +369,7 @@ export default function edit({ candidaturaData }) {
           <div className="row">
             <div className="col-lg-12">
               <div className="card-style mb-30">
-                <h6 className="mb-25">Selecione a universidade e o curso</h6>
+                <h6 className="mb-25">Selecione a universidade</h6>
                 <div className="select-style-2">
                   <label>Univeridade</label>
                   <div className="select-position">
@@ -382,12 +381,12 @@ export default function edit({ candidaturaData }) {
                         setUniId(e.target.value);
                       }}
                     >
-                      <option value="" disabled>
+                      <option value="" disabled selected>
                         Selecione uma universidade
                       </option>
                       {universidade.map(({ id, Nome }) => {
-                        return ( 
-                          <option key={id} value={id} > 
+                        return (
+                          <option key={id} value={id}>
                             {Nome}
                           </option>
                         );
@@ -395,15 +394,64 @@ export default function edit({ candidaturaData }) {
                     </select>
                   </div>
                 </div>
+                <h6 className="mb-25">Selecione os cursos</h6>
                 <div className="select-style-2">
-                  <label>Curso</label>
+                  <label>Primeira opcao</label>
                   <div className="select-position">
                     <select
                       name="cursos"
                       id="cursos"
-                      value={cursoId}
+                      value={cursoId.escolha1}
                       onChange={(e) => {
-                        setCursoId(e.target.value);
+                        setCursoId({ ...cursoId, escolha1: e.target.value });
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Selecione um curso
+                      </option>
+                      {cursos.map((curso) => {
+                        return (
+                          <option key={curso.id} value={curso.id}>
+                            {curso.Nome_curso}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="select-style-2">
+                  <label>Segunda opcao</label>
+                  <div className="select-position">
+                    <select
+                      name="cursos"
+                      id="cursos"
+                      value={cursoId.escolha2}
+                      onChange={(e) => {
+                        setCursoId({ ...cursoId, escolha2: e.target.value });
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Selecione um curso
+                      </option>
+                      {cursos.map((curso) => {
+                        return (
+                          <option key={curso.id} value={curso.id}>
+                            {curso.Nome_curso}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="select-style-2">
+                  <label>Terceira opcao</label>
+                  <div className="select-position">
+                    <select
+                      name="cursos"
+                      id="cursos"
+                      value={cursoId.escolha3}
+                      onChange={(e) => {
+                        setCursoId({ ...cursoId, escolha3: e.target.value });
                       }}
                     >
                       <option value="" disabled selected>
@@ -422,64 +470,35 @@ export default function edit({ candidaturaData }) {
               </div>
             </div>
           </div>
-
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="card-style mb-30">
-                <h6 className="mb-25">Documentos necessarios</h6>
-
-                <div className="input-style-1">
-                  <label>Passporte</label>
-                  <input
-                    type="file"
-                    name="Passaporte"
-                    id="Passaporte"
-                    onChange={handleAnexoData}
-                  />
-                </div>
-
-                <div className="input-style-1">
-                  <label>NIF</label>
-                  <input
-                    type="file"
-                    name="Nif"
-                    id="Nif"
-                    onChange={handleAnexoData}
-                  />
-                </div>
-
-                <div className="input-style-1">
-                  <label>Certificado Apostilado</label>
-                  <input
-                    type="file"
-                    name="certificado"
-                    id="certificado"
-                    onChange={handleAnexoData}
-                  />
-                </div>
-
-                <input
-                  type="submit"
-                  value="Candidatar"
-                  className="main-btn primary-btn rounded-md btn-hover"
-                />
-              </div>
-            </div>
-          </div>
+          {/*<FileUpload handleAnexoId={handleAnexoId}>
+            <input
+              type="submit"
+              value="Candidatar"
+              className="main-btn primary-btn rounded-md btn-hover"
+            />
+            </FileUpload>*/}
         </form>
       </Layout>
     </div>
   );
 }
 
-export async function getServerSideProps({ params: { id } }) {
-  const data = await fetch(`http://localhost:1337/candidaturas/${id}`);
+export async function getServerSideProps({ req, params: { id } }) {
+  const { token } = parseCookies(req);
+
+  const data = await fetch(`http://localhost:1337/candidaturas/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const candidaturaData = await data.json();
 
   return {
     props: {
       candidaturaData,
+      token,
     },
   };
 }

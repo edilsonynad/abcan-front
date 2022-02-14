@@ -21,7 +21,7 @@ export default function ListItems({ candidaturas, token }) {
         }
         toast.error(data.message);
       } else {
-        router.push("/admin/candidatura");
+        router.push("/roles/candidatura");
       }
     }
   };

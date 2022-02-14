@@ -20,7 +20,7 @@ if(user){
     setRole({...role, Admin: true})
   }else  if(user.papel === "Antena"){
     setRole({...role, Antena: true})
-  }else  if(user.papel === "Normal"){
+  }else  if(user.papel === "Candidato"){
     setRole({...role, Normal: true})
   }
 }
