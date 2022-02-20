@@ -67,12 +67,12 @@ export default function edit({ candidaturaData, token }) {
   useEffect(
     async () => {
       const resContato = await fetch(
-        `http://localhost:1337/contatoes/${candidato.contato}`
+        `${API_URL}/contatoes/${candidato.contato}`
       );
       const contatoAPI = await resContato.json();
 
       const resEndereco = await fetch(
-        `http://localhost:1337/enderecos/${candidato.endereco}`
+        `${API_URL}/enderecos/${candidato.endereco}`
       );
 
       const enderecoAPI = await resEndereco.json();
@@ -113,7 +113,7 @@ export default function edit({ candidaturaData, token }) {
 
     //Update Endereco
     const resEndereco = await fetch(
-      `http://localhost:1337/enderecos/${endereco.id}`,
+      `${API_URL}/enderecos/${endereco.id}`,
       {
         method: "PUT",
         headers: {
@@ -130,7 +130,7 @@ export default function edit({ candidaturaData, token }) {
 
     /**Update Caontato */
     const resContato = await fetch(
-      `http://localhost:1337/contatoes/${contato.id}`,
+      `${API_URL}/contatoes/${contato.id}`,
       {
         method: "PUT",
         headers: {
@@ -147,7 +147,7 @@ export default function edit({ candidaturaData, token }) {
 
     /**Update candidatos */
      const res = await fetch(
-      `http://localhost:1337/candidatoes/${candidato.id}`,
+      `${API_URL}/candidatoes/${candidato.id}`,
       {
         method: "PUT",
         headers: {

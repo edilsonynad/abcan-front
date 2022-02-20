@@ -1,7 +1,8 @@
 import Layout from "@/components/Layout";
-
 import { useEffect, useState } from "react";
 import { parseCookies } from "@/helpers/index";
+import {API_URL} from '@/config/index'
+
 export default function CandidaturaPage({ candidatura }) {
   const [endereco, setEndereco] = useState({});
   const [contato, setContato] = useState({});
@@ -12,13 +13,13 @@ export default function CandidaturaPage({ candidatura }) {
 
   useEffect(async () => {
     const dataContato = await fetch(
-      `http://localhost:1337/contatoes/${candidatura.candidato.contato}`
+      `${API_URL}/contatoes/${candidatura.candidato.contato}`
     );
     const contato = await dataContato.json();
     setContato(contato);
 
     const dataEndereco = await fetch(
-      `http://localhost:1337/enderecos/${candidatura.candidato.endereco}`
+      `${API_URL}/enderecos/${candidatura.candidato.endereco}`
     );
     const endereco = await dataEndereco.json();
     setEndereco(endereco);
@@ -99,11 +100,11 @@ export default function CandidaturaPage({ candidatura }) {
         <h6 className="mb-25">Anexos</h6>
         <div className="row">
           {candidatura.anexo ? <div className="col-lg-12">
-            <i className="lni lni-download"></i> <a href={`http://localhost:1337${candidatura.anexo.Passaporte.url}`}>Passaporte</a>
+            <i className="lni lni-download"></i> <a href={`${API_URL}${candidatura.anexo.Passaporte.url}`}>Passaporte</a>
             <br />{" "}
-            <i className="lni lni-download"></i> <a href={`http://localhost:1337${candidatura.anexo.Nif.url}`}>Nif</a>
+            <i className="lni lni-download"></i> <a href={`${API_URL}${candidatura.anexo.Nif.url}`}>Nif</a>
             <br />{" "}
-            <i className="lni lni-download"></i> <a href={`http://localhost:1337${candidatura.anexo.certificado.url}`}>Certificado</a>
+            <i className="lni lni-download"></i> <a href={`${API_URL}${candidatura.anexo.certificado.url}`}>Certificado</a>
           </div>: <p>Sem anexos para apresentar</p>}
         </div>
       </div>
@@ -113,7 +114,7 @@ export default function CandidaturaPage({ candidatura }) {
 
 export async function getServerSideProps({ req, params: { id } }) {
   const { token } = parseCookies(req);
-  const data = await fetch(`http://localhost:1337/candidaturas/${id}`,{
+  const data = await fetch(`${API_URL}/candidaturas/${id}`,{
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}` 

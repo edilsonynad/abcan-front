@@ -189,7 +189,7 @@ export default function add({ token }) {
         return;
       }
       const data = await res.json();
-      router.push(`/candidatura/${data.id}`);
+      router.push(`/roles/candidatura/${data.id}`);
     }
   }, [candidatura]);
 
@@ -213,10 +213,10 @@ export default function add({ token }) {
     setEndereco({ ...endereco, [name]: value });
   };
 
-  const handleAnexoData = (e) => {
+  /*const handleAnexoData = (e) => {
     const { name, value } = e.target;
     setAnexo({ ...anexo, [name]: value });
-  };
+  };*/
 
   const handleAnexoId = (id) => {
     setAnexoId(id);
