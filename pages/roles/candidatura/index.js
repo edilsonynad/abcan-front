@@ -7,7 +7,7 @@ import { API_URL } from "@/config/index";
 export default function Candidaturas({ token, candidaturas }) {
   return (
     <Fragment>
-      <Layout title="Suas candidaturas">
+      <Layout title="Suas candidaturas" button="Criar candidatura" url="/roles/candidatura/add">
         <ListItems candidaturas={candidaturas} token={token}/>
       </Layout>
     </Fragment>

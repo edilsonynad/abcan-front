@@ -4,6 +4,7 @@ import { parseCookies } from "@/helpers/index";
 import {API_URL} from '@/config/index'
 
 export default function CandidaturaPage({ candidatura }) {
+  console.log(candidatura)
   const [endereco, setEndereco] = useState({});
   const [contato, setContato] = useState({});
   const { id, published_at } = candidatura;

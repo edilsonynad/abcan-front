@@ -31,12 +31,12 @@ export default function NavNormal() {
           </Link>
         </li>
         <li>
-          <Link href="/roles/reguralamentos">
+         { /*<Link href="/roles/reguralamentos">
             <a href="index.html" className="">
               {" "}
               Regulamentos{" "}
             </a>
-          </Link>
+  </Link>*/}
         </li>
       </ul>
     </li>

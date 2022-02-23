@@ -10,7 +10,6 @@ export default function Candidaturas({ token, candidaturas }) {
     <Fragment>
       <Layout title="Suas candidaturas" button="Criar candidatura" url="/roles/candidatura/add">
         {candidaturas ? <ListItems candidaturas={candidaturas} token={token}/> : "Sem candidaturas"}
-        
       </Layout>
     </Fragment>
   );

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { parseCookies } from "@/helpers/index";
-import {API_URL} from '@/config/index'
+import { API_URL } from "@/config/index";
 
 export default function add({ token }) {
   /**
@@ -44,9 +44,7 @@ export default function add({ token }) {
     Nome: "",
     Passaporte: "",
     NIF: "",
-    Data_nascimento: "",
-    contato: "",
-    endereco: "",
+    Data_nascimento: ""
   });
 
   const [endereco, setEndereco] = useState({
@@ -61,12 +59,12 @@ export default function add({ token }) {
     Email: "",
   });
 
-  /**
-   * Anexos
-   */
+  const [updateCandidatura, setUpdateCandidatura] = useState(false);
+  const [finalizar, setFinalizar] = useState(false);
 
   const [anexoId, setAnexoId] = useState(null);
 
+  /**Fetch university and courses */
   useEffect(async () => {
     const dataUniversidade = await fetch(`${API_URL}/universidades`);
     const universidade = await dataUniversidade.json();
@@ -75,112 +73,114 @@ export default function add({ token }) {
 
   useEffect(async () => {
     if (uniId) {
-      const dataCursos = await fetch(
-        `${API_URL}/universidades/${uniId}`
-      );
+      const dataCursos = await fetch(`${API_URL}/universidades/${uniId}`);
       const universidadesCursos = await dataCursos.json();
       setCursos(universidadesCursos.cursos);
     }
   }, [uniId]);
 
-  const submitCandidatoInfo = async () => {
-    //Submit Endereco
-    const resEndereco = await fetch(`${API_URL}/enderecos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(endereco),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    if (!resEndereco.ok) {
-      toast.error("Problemas com o cadastro do endereco");
-      return;
-    }
-    const ende = await resEndereco.json();
-    setEnderecoId(ende.id);
-    //Submit Contato
-    const resContato = await fetch(`${API_URL}/contatoes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(contato),
-    });
-
-    if (!resContato.ok) {
-      toast.error("Problemas com o cadastro do contato");
-      return;
-    }
-    const cont = await resContato.json();
-
-    setContatoId(cont.id);
-  };
-
-  useEffect(async () => {
-    if (contatoId != undefined && enderecoId != undefined) {
-      setCandidato({ ...candidato, endereco: enderecoId, contato: contatoId });
-    }
-  }, [contatoId, enderecoId]);
-
-  useEffect(async () => {
-    const hasEmpityFields = Object.values(candidato).some(
+    const candidatoEmpty = Object.values(candidato).some(
       (element) => element === ""
     );
 
-    if (hasEmpityFields) {
-      return;
-    }
-    const res = await fetch(`${API_URL}/candidatoes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(candidato),
-    });
-
-    if (!res.ok) {
-      toast.error("Problemas com o cadastro do candidato");
-      return;
-    }
-    const cand = await res.json();
-    setCandidatoId(cand.id);
-  }, [candidato]);
-
-  /**Setting Candidatura State */
-  useEffect(async () => {
-    if (candidatoId != undefined) {
-      setCandidatura({
-        candidato: { id: candidatoId },
-        universidade: { id: uniId },
-        anexo: { id: anexoId },
-        Estado: "Recebido",
-        cursos: [
-          { id: cursoId.escolha1 },
-          { id: cursoId.escolha2 },
-          { id: cursoId.escolha3 },
-        ],
-      });
-    }
-  }, [candidatoId, uniId, cursoId]);
-
-  useEffect(async () => {
-    const hasEmpityFields = Object.values(candidatura).some(
+    const contatoEmpty = Object.values(contato).some(
       (element) => element === ""
     );
-    if (hasEmpityFields) {
+
+    const enderecoEmpty = Object.values(endereco).some(
+      (element) => element === ""
+    );
+
+    if (candidatoEmpty) {
+      toast.error(
+        "Por favor preencha todos os dados nos campos Dados Pessoais"
+      );
+      return;
+    } else if (contatoEmpty) {
+      console.log(contato)
+      toast.error("Por favor preencha todos os dados nos campos Contatos");
+      return;
+    } else if (enderecoEmpty) {
+      toast.error("Por favor preencha todos os dados nos campos Enderecos");
       return;
     } else {
-      const res = await fetch(`${API_URL}/candidaturas`, {
+      //Endereco
+      const resEndereco = await fetch(`${API_URL}/enderecos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(endereco),
+      });
+
+      if (!resEndereco.ok) {
+        toast.error("Problemas com o cadastro do endereco");
+        return;
+      } 
+        const ende = await resEndereco.json();
+    
+
+      /**Caontato */
+      const resContato = await fetch(`${API_URL}/contatoes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(contato),
+      });
+
+      if (!resContato.ok) {
+        toast.error("Problemas com o cadastro do contato");
+        return;
+      } 
+        const cont = await resContato.json();
+      
+
+      /**candidatos */
+      const resCamdidato = await fetch(`${API_URL}/candidatoes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Nome: candidato.Nome,
+          Passaporte: candidato.Passaporte,
+          contato: cont.id,
+          endereco: ende.id,
+          NIF: candidato.NIF,
+          Data_nascimento: candidato.Data_nascimento,
+        }),
+      });
+
+      if (!resCamdidato.ok) {
+        toast.error("Problemas com o cadastro do candidato");
+        return;
+      }
+      const cand = await resCamdidato.json()
+
+      const reCandidatura = await fetch(`${API_URL}/candidaturas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(candidatura),
+        body: JSON.stringify({
+          candidato: { id: cand.id },
+          universidade: { id: uniId },
+          anexo: { id: anexoId },
+          Estado: "Recebido",
+          cursos: [
+            { id: cursoId.escolha1 },
+            { id: cursoId.escolha2 },
+            { id: cursoId.escolha3 },
+          ],
+        }),
       });
 
-      if (!res.ok) {
+      if (!reCandidatura.ok) {
         if (res.status === 403 || res.status === 401) {
           toast.error("Nao tens permissao");
           return;
@@ -188,15 +188,12 @@ export default function add({ token }) {
         toast.error("Problemas com o cadastro da candidatura");
         return;
       }
-      const data = await res.json();
+      const data = await reCandidatura.json();
       router.push(`/roles/candidatura/${data.id}`);
-    }
-  }, [candidatura]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    submitCandidatoInfo();
+    }
   };
+
   /**Colecting data */
   const handlePersonalData = (e) => {
     const { name, value } = e.target;
@@ -464,7 +461,6 @@ export default function add({ token }) {
 export async function getServerSideProps({ req }) {
   const { token } = parseCookies(req);
 
- 
   return {
     props: {
       token,

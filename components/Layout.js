@@ -14,15 +14,15 @@ export default function Layout({ title, children, button, url }) {
               <div className="row align-items-center">
                 <div className="col-md-6">
                   <div className="title d-flex align-items-center flex-wrap mb-30">
-                    <h2 class="mr-40">{title}</h2>
+                    <h2 className="mr-40">{title}</h2>
 
                     {button && (
                       <Link href={url}>
                         <a
                           href="#0"
-                          class="main-btn primary-btn btn-hover btn-sm"
+                          className="main-btn primary-btn btn-hover btn-sm"
                         >
-                          <i class="lni lni-plus mr-5"></i> {button}
+                          <i className="lni lni-plus mr-5"></i> {button}
                         </a>
                       </Link>
                     )}

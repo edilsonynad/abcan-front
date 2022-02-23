@@ -178,7 +178,7 @@ export default function FileUpload({ children, handleAnexoId }) {
             />
           </div>
           <button
-            class="main-btn primary-btn-outline btn-hover"
+            className="main-btn primary-btn-outline btn-hover"
             onClick={handleUploadFiles}
           >
             Subir ficheiros

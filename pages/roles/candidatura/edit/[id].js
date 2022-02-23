@@ -66,32 +66,42 @@ export default function edit({ candidaturaData, token }) {
 
   useEffect(
     async () => {
-      const resContato = await fetch(
-        `${API_URL}/contatoes/${candidato.contato}`
+      const contatoEmpty = Object.values(contato).some(
+        (element) => element === ""
       );
-      const contatoAPI = await resContato.json();
-
-      const resEndereco = await fetch(
-        `${API_URL}/enderecos/${candidato.endereco}`
+      const enderecoEmpty = Object.values(endereco).some(
+        (element) => element === ""
       );
-
-      const enderecoAPI = await resEndereco.json();
-
-      setContato({
-        id: contatoAPI.id,
-        Telefone: contatoAPI.Telefone,
-        Email: contatoAPI.Email,
-      });
-
-      setEndereco({
-        id: enderecoAPI.id,
-        Ilha: enderecoAPI.Ilha,
-        Cidade: enderecoAPI.Cidade,
-        Concelho: enderecoAPI.Concelho,
-        Zona: enderecoAPI.Zona,
-      });
+      if(contatoEmpty && enderecoEmpty){
+        const resContato = await fetch(
+          `${API_URL}/contatoes/${candidato.contato}`
+        );
+        const contatoAPI = await resContato.json();
+  
+        const resEndereco = await fetch(
+          `${API_URL}/enderecos/${candidato.endereco}`
+        );
+  
+        const enderecoAPI = await resEndereco.json();
+  
+        setContato({
+          id: contatoAPI.id,
+          Telefone: contatoAPI.Telefone,
+          Email: contatoAPI.Email,
+        });
+  
+        setEndereco({
+          id: enderecoAPI.id,
+          Ilha: enderecoAPI.Ilha,
+          Cidade: enderecoAPI.Cidade,
+          Concelho: enderecoAPI.Concelho,
+          Zona: enderecoAPI.Zona,
+        });
+      }else{
+        return
+      }
     },
-    { endereco, contato }
+   [endereco, contato ] 
   );
 
   useEffect(async () => {
@@ -203,7 +213,7 @@ export default function edit({ candidaturaData, token }) {
       }
       setFinalizar(false)
     }
-  }, [candidatura, finalizar]);
+  }, [candidatura, finalizar, candidaturaData]);
 
   /**Colecting data */
   const handlePersonalData = (e) => {
@@ -229,6 +239,8 @@ export default function edit({ candidaturaData, token }) {
   const handleAnexoId = (id) => {
     setAnexoId(id);
   };
+
+  console.log(endereco)
 
   return (
     <div>
@@ -346,7 +358,7 @@ export default function edit({ candidaturaData, token }) {
                     name="Concelho"
                     id="Concelho"
                     placeholder="Concelho"
-                    value={endereco.Conselho}
+                    value={endereco.Concelho}
                     onChange={handleEnderecoData}
                   />
                 </div>
@@ -470,13 +482,13 @@ export default function edit({ candidaturaData, token }) {
               </div>
             </div>
           </div>
-          {/*<FileUpload handleAnexoId={handleAnexoId}>
+          {<FileUpload handleAnexoId={handleAnexoId}>
             <input
               type="submit"
               value="Candidatar"
               className="main-btn primary-btn rounded-md btn-hover"
             />
-            </FileUpload>*/}
+            </FileUpload>}
         </form>
       </Layout>
     </div>

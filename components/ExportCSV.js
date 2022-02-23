@@ -57,7 +57,7 @@ export default function ExportCSV({ candidaturas }) {
     filename: "Clue_Mediator_Report.csv",
   };
   return (
-    <div classname="App">
+    <div className="App">
       <CSVLink {...csvReport}>Exportar CSV</CSVLink>
     </div>
   );
