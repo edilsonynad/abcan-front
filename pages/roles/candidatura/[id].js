@@ -4,7 +4,6 @@ import { parseCookies } from "@/helpers/index";
 import { API_URL } from "@/config/index";
 
 export default function CandidaturaPage({ candidatura }) {
-  console.log(candidatura);
   const [endereco, setEndereco] = useState({});
   const [contato, setContato] = useState({});
   const { id, published_at } = candidatura;
@@ -54,7 +53,7 @@ export default function CandidaturaPage({ candidatura }) {
           <div className="col-lg-4">
             <h6 className="mb-25">Dados Pessoais</h6>
             <p>Nome: {Nome}</p>
-            <p>Data nascimeto: {Data_nascimento}</p>
+            <p>Data nascimento: {Data_nascimento}</p>
             <p>NIf: {NIF}</p>
             <p>Passaporte: {Passaporte}</p>
           </div>

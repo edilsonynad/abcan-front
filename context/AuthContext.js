@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   //Register user
   const register = async (user) => {
-    console.log(JSON.stringify(user));
+
     const res = await fetch(`${NEXT_URL}/api/register`, {
       method: "POST",
       headers: {
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     const data = await res.json();
-    console.log(data);
+
     if (res.ok) {
       setUser(data.user);
       router.push("/account/redirect");
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
       setUser(data.user);
       router.push("/account/redirect");
     } else {
-      console.log(data.message);
+
       setError(data.message);
       setError(null);
     }
