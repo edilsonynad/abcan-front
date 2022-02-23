@@ -244,7 +244,7 @@ export default function edit({ candidaturaData, token }) {
 
   return (
     <div>
-      <Layout title="Realize a sua candidatura">
+      <Layout title="Edite a sua candidatura">
         <ToastContainer />
         <form onSubmit={handleSubmit}>
           <div className="row">
@@ -485,7 +485,7 @@ export default function edit({ candidaturaData, token }) {
           {<FileUpload handleAnexoId={handleAnexoId}>
             <input
               type="submit"
-              value="Candidatar"
+              value="Editar candidatar"
               className="main-btn primary-btn rounded-md btn-hover"
             />
             </FileUpload>}

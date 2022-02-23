@@ -44,7 +44,7 @@ export default function add({ token }) {
     Nome: "",
     Passaporte: "",
     NIF: "",
-    Data_nascimento: ""
+    Data_nascimento: "",
   });
 
   const [endereco, setEndereco] = useState({
@@ -100,7 +100,6 @@ export default function add({ token }) {
       );
       return;
     } else if (contatoEmpty) {
-      console.log(contato)
       toast.error("Por favor preencha todos os dados nos campos Contatos");
       return;
     } else if (enderecoEmpty) {
@@ -119,9 +118,8 @@ export default function add({ token }) {
       if (!resEndereco.ok) {
         toast.error("Problemas com o cadastro do endereco");
         return;
-      } 
-        const ende = await resEndereco.json();
-    
+      }
+      const ende = await resEndereco.json();
 
       /**Caontato */
       const resContato = await fetch(`${API_URL}/contatoes`, {
@@ -135,9 +133,8 @@ export default function add({ token }) {
       if (!resContato.ok) {
         toast.error("Problemas com o cadastro do contato");
         return;
-      } 
-        const cont = await resContato.json();
-      
+      }
+      const cont = await resContato.json();
 
       /**candidatos */
       const resCamdidato = await fetch(`${API_URL}/candidatoes`, {
@@ -159,7 +156,7 @@ export default function add({ token }) {
         toast.error("Problemas com o cadastro do candidato");
         return;
       }
-      const cand = await resCamdidato.json()
+      const cand = await resCamdidato.json();
 
       const reCandidatura = await fetch(`${API_URL}/candidaturas`, {
         method: "POST",
@@ -190,7 +187,6 @@ export default function add({ token }) {
       }
       const data = await reCandidatura.json();
       router.push(`/roles/candidatura/${data.id}`);
-
     }
   };
 
