@@ -4,12 +4,10 @@ import Layout from "@/components/Layout";
 import ListItems from "@/components/ListItems";
 import { parseCookies } from "@/helpers/index";
 import { API_URL } from "@/config/index";
-import ExportCSV from "@/components/ExportCSV";
 export default function Candidaturas({ token, candidaturas }) {
   return (
     <Fragment>
       <Layout title="Candidaturas realizadas">
-        <ExportCSV candidaturas={candidaturas}/>
         <ListItems candidaturas={candidaturas} token={token}/>
       </Layout>
     </Fragment>

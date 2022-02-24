@@ -10,7 +10,6 @@ export default function Candidaturas({ token, candidaturas }) {
   return (
     <Fragment>
       <Layout title="Suas candidaturas" button="Criar candidatura" url="/roles/candidatura/add">
-      <ExportCSV candidaturas={candidaturas}/>
       {candidaturas.length > 0 ? <ListItems candidaturas={candidaturas} token={token}/> : "Sem candidaturas"}
       </Layout>
     </Fragment>
