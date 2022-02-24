@@ -2,12 +2,13 @@ import ListItem from "./ListItem";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_URL } from "../config";
 export default function ListItems({ candidaturas, token }) {
 
   const router = useRouter();
   const deleteEvent = async (id) => {
     if (confirm("Tem certeza que pretende eliminar essa candidatura???")) {
-      const res = await fetch(`http://localhost:1337/candidaturas/${id}`, {
+      const res = await fetch(`${API_URL}/candidaturas/${id}`, {
         method: "DELETE",
         headers :{
           Authorization: `Bearer ${token}`
