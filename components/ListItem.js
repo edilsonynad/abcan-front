@@ -23,9 +23,9 @@ export default function ListItem({ candidatura, handleDelete }) {
       <td>
         <div className="action">
          { <button className="text-sucess">
-            <Link href={`/roles/candidatura/edit/${candidatura.id}`}>
+            {/*<Link href={`/roles/candidatura/edit/${candidatura.id}`}>
               <i className=" lni lni-pencil"></i>
-            </Link>
+        </Link>*/}
         </button> }
           <button className="text-success">
             <Link href={`/roles/candidatura/${candidatura.id}`}>
