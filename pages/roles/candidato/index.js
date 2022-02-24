@@ -4,11 +4,13 @@ import Layout from "@/components/Layout";
 import ListItems from "@/components/ListItems";
 import { parseCookies } from "@/helpers/index";
 import { API_URL } from "@/config/index";
+import ExportCSV from "@/components/ExportCSV";
 import Link from "next/link";
 export default function Candidaturas({ token, candidaturas }) {
   return (
     <Fragment>
       <Layout title="Suas candidaturas" button="Criar candidatura" url="/roles/candidatura/add">
+      <ExportCSV candidaturas={candidaturas}/>
       {candidaturas.length > 0 ? <ListItems candidaturas={candidaturas} token={token}/> : "Sem candidaturas"}
       </Layout>
     </Fragment>

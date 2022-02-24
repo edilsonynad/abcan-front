@@ -211,6 +211,7 @@ export default function edit({ candidaturaData, token }) {
         toast.error("Problemas com o cadastro da candidatura");
         return;
       }
+      router.push(`/roles/candidatura/${candidaturaData.id}`);
       setFinalizar(false)
     }
   }, [candidatura, finalizar, candidaturaData]);
@@ -240,7 +241,7 @@ export default function edit({ candidaturaData, token }) {
     setAnexoId(id);
   };
 
-  console.log(endereco)
+
 
   return (
     <div>
@@ -483,12 +484,13 @@ export default function edit({ candidaturaData, token }) {
             </div>
           </div>
           {<FileUpload handleAnexoId={handleAnexoId}>
+          
+            </FileUpload>}
             <input
               type="submit"
               value="Editar candidatar"
               className="main-btn primary-btn rounded-md btn-hover"
             />
-            </FileUpload>}
         </form>
       </Layout>
     </div>
